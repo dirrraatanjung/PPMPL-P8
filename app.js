@@ -1,14 +1,12 @@
 const express = require('express');
 const app = express();
 
-app.get('/', (req,res) => {
-    res.send('Hello, World!');
-
-});
+// Middleware untuk parsing JSON dengan batas ukuran payload
+app.use(express.json({ limit: '1mb' }));
 
 // Middleware untuk menangani metode HTTP yang tidak didukung
 app.use((req, res, next) => {
-    if (req.method !== 'GET' && req.method !== 'POST') {
+    if (!['GET', 'POST'].includes(req.method)) {
         return res.status(405).json({ error: 'Method Not Allowed' });
     }
     next();
